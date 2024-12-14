@@ -1820,8 +1820,16 @@ class NuScenesMapExplorer:
         def int_coords(x):
             # function to round and convert to int
             return np.array(x).round().astype(np.int32)
-        exteriors = [int_coords(poly.exterior.coords) for poly in polygons]
-        interiors = [int_coords(pi.coords) for poly in polygons for pi in poly.interiors]
+
+        # Handle both single polygons and multipolygons
+        if polygons.geom_type == 'MultiPolygon':
+            polygons_list = list(polygons.geoms)
+        else:  # Single polygon
+            polygons_list = [polygons]
+
+        exteriors = [int_coords(poly.exterior.coords) for poly in polygons_list]
+        interiors = [int_coords(pi.coords) for poly in polygons_list for pi in poly.interiors]
+
         cv2.fillPoly(mask, exteriors, 1)
         cv2.fillPoly(mask, interiors, 0)
         return mask
