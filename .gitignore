@@ -19,3 +19,5 @@ doc
 .project
 .pydevproject
 _ext
+error_scikit.txt
+errorlog.txt
