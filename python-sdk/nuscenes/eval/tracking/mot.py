@@ -104,10 +104,10 @@ class MOTAccumulatorCustom(motmetrics.mot.MOTAccumulator):
 
             # Update index
             if update_frame_indices:
-                next_frame_id = max(r.index.get_level_values(0).max() + 1,
-                                    r.index.get_level_values(0).unique().shape[0])
-                if np.isnan(next_frame_id):
+                if r.index.values.size == 0:
                     next_frame_id = 0
+                else:
+                    next_frame_id = np.max(np.array(r.index.values), axis=0)[0] + 1
                 copy.index = copy.index.map(lambda x: (x[0] + next_frame_id, x[1]))
                 infos['frame_offset'] = next_frame_id
 
